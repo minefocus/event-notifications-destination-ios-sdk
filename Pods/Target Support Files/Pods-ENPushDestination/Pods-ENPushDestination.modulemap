@@ -1,0 +1,6 @@
+framework module Pods_ENPushDestination {
+  umbrella header "Pods-ENPushDestination-umbrella.h"
+
+  export *
+  module * { export * }
+}

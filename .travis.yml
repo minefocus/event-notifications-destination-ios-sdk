@@ -1,0 +1,33 @@
+language: objective-c
+
+matrix:
+  include:
+    - osx_image: xcode10.1
+    - osx_image: xcode11.1
+    - osx_image: xcode13.2
+
+before_install:
+  - rvm install 2.4.0
+
+install:
+  - gem install slather
+  - gem install cocoapods
+  - gem install jazzy
+
+script:
+  - pod update
+  - pod lib lint --allow-warnings
+  - carthage update
+  - xcodebuild clean build -workspace ENPushDestination.xcworkspace -scheme ENPushDestination CODE_SIGNING_REQUIRED=NO SUPPORTS_MACCATALYST=NO -destination "generic/platform=iOS Simulator"
+
+  - if [[ "${TRAVIS_JOB_NUMBER}" = *".1"* ]]; then
+      xcodebuild test -workspace ENPushDestination.xcworkspace -scheme ENPushDestinationTests -destination 'platform=iOS Simulator,name=iPhone 6,OS=10.1';
+    fi
+  
+  - if [[ "${TRAVIS_JOB_NUMBER}" = *".2"* ]]; then
+      xcodebuild test -workspace ENPushDestination.xcworkspace -scheme ENPushDestinationTests -destinatio 'platform=iOS Simulator,name=iPhone 11 Pro Max,OS=13.1' -enableCodeCoverage YES;
+    fi
+
+  - if [[ "${TRAVIS_JOB_NUMBER}" = *".3"* ]]; then
+      xcodebuild test -workspace ENPushDestination.xcworkspace -scheme ENPushDestinationTests -destination 'platform=iOS Simulator,name=iPhone 11,OS=15.2';
+    fi
