@@ -7,7 +7,7 @@ matrix:
     - osx_image: xcode13.2
 
 before_install:
-  - rvm install 2.4.0
+  - rvm install 2.5.0
 
 install:
   - gem install cocoapods
