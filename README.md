@@ -24,7 +24,7 @@ Changes might occur which impact applications that use this SDK.
 
 ## Overview
 
-The IBM Cloud Event Notifications Service iOS destination SDK allows developers to register for FCM destiantion of Event Notifications service in IBM cloud.
+The IBM Cloud Event Notifications Service iOS destination SDK allows developers to register for APNS destiantion of Event Notifications service in IBM cloud.
 
 Service Name | Artifact Coordinates
 --- | ---
@@ -37,19 +37,12 @@ Service Name | Artifact Coordinates
 * An [IBM Cloud][ibm-cloud-onboarding] account.
 * An Event Notifications Instance
 * An IAM API key to allow the SDK to access your account. Create one [here](https://cloud.ibm.com/iam/apikeys).
-* Xcode 10+
+* Xcode 9.3+
 * Swift 4.2+
 * iOS 10.0+
 
 ## Installation
 The current version of this SDK is: 0.0.1
-
-Each service's artifact coordinates are listed in the table above.
-
-The project artifacts are published on the public [Maven Central](https://repo1.maven.org/maven2/)
-artifact repository. This is the default public repository used by maven when searching for dependencies.
-To use this repository within a gradle build, please see
-[this link](https://docs.gradle.org/current/userguide/declaring_repositories.html).
 
 To use the Event Notifications iOS destination SDK, define a dependency that contains the artifact coordinates (group id, artifact id and version) for the service, like this:
 
@@ -229,32 +222,30 @@ The following notification options are supported.
 1. To enable interactive push notifications, the notification action parameters must be passed in as part of the notification object. The following is a sample code to enable interactive notifications:
 
 ```swift
-	let actionOne = ENPushNotificationAction(identifierName: "FIRST", buttonTitle: "Accept", isAuthenticationRequired: false, defineActivationMode: .foreground)
-        
-    let actionTwo = ENPushNotificationAction(identifierName: "SECOND", buttonTitle: "Reject", isAuthenticationRequired: false, defineActivationMode: .destructive)
-        
-    let category = ENPushNotificationActionCategory(identifierName: "category", buttonActions: [actionOne, actionTwo])
+let actionOne = ENPushNotificationAction(identifierName: "FIRST", buttonTitle: "Accept", isAuthenticationRequired: false, defineActivationMode: .foreground)
     
-	let notificationOptions = ENPushClientOptions()
-    notificationOptions.setInteractiveNotificationCategories(categoryName: [category])
+let actionTwo = ENPushNotificationAction(identifierName: "SECOND", buttonTitle: "Reject", isAuthenticationRequired: false, defineActivationMode: .destructive)
+    
+let category = ENPushNotificationActionCategory(identifierName: "category", buttonActions: [actionOne, actionTwo])
 
-	enPush.initialize(instanceGUID, destinationID, apiKey, notificationOptions)
+let notificationOptions = ENPushClientOptions()
+notificationOptions.setInteractiveNotificationCategories(categoryName: [category])
+enPush.initialize(instanceGUID, destinationID, apiKey, notificationOptions)
 
 ```
 
 2. Implement the callback method on AppDelegate.swift:
 
 ```swift
-	func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-
-	     switch response.actionIdentifier {
-         case "Accept":
-           print("Clicked Accept")
-         case "Reject":
-           print("Clicked Reject")
-         default:
-         }
-        completionHandler()
+func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+	switch response.actionIdentifier {
+		case "Accept":
+		print("Clicked Accept")
+		case "Reject":
+		print("Clicked Reject")
+		default:
+	}
+	completionHandler()
  }
 ```
 	
