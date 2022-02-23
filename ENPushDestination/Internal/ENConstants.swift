@@ -23,7 +23,6 @@
 
 import Foundation
 
-
 internal let ENPUSH_VARIABLES  = "variables"
 internal let HAS_ENPUSH_VARIABLES  = "hasVariables"
 internal let ENPUSH_APP_GUID  = "enappguid"
@@ -48,4 +47,3 @@ internal let ENPUSH_USER_ID  = "user_id"
 
 internal let ENPUSH_NETWORK_ERROR = 503
 internal let ENPUSH_RESOURCE_NOT_FOUND_ERROR = 404
-

@@ -29,7 +29,7 @@ import UIKit
  */
 open class ENPushUtils: NSObject {
     
-    static var loggerMessage:String = ""
+    static var loggerMessage: String = ""
     private static var account_attr: String {
         if let bundleID = Bundle.main.bundleIdentifier {
             return bundleID.appending("ENPushUtils-Secrets")
@@ -37,7 +37,7 @@ open class ENPushUtils: NSObject {
         return ""
     }
     
-    @objc dynamic open class func saveValueToStorage(_ value:Data?, key:String) {
+    @objc dynamic open class func saveValueToStorage(_ value: Data?, key: String) {
         
         guard let data = value else {return}
         
@@ -57,7 +57,7 @@ open class ENPushUtils: NSObject {
             let query = [
                 kSecAttrService: key,
                 kSecAttrAccount: account_attr,
-                kSecClass: kSecClassGenericPassword,
+                kSecClass: kSecClassGenericPassword
             ] as CFDictionary
             
             let attributesToUpdate = [kSecValueData: data] as CFDictionary
@@ -66,7 +66,7 @@ open class ENPushUtils: NSObject {
         
     }
     
-    @objc dynamic open class func getValueFromStorage(key:String) -> Data? {
+    @objc dynamic open class func getValueFromStorage(key: String) -> Data? {
         
         let query = [
             kSecAttrService: key,
@@ -83,7 +83,7 @@ open class ENPushUtils: NSObject {
     }
     
     /** Check for the paramterised notifications*/
-    class func checkTemplateNotifications(_ body:String) -> String {
+    class func checkTemplateNotifications(_ body: String) -> String {
         
         let regex = "\\{\\{.*?\\}\\}"
         var text = body
@@ -154,5 +154,3 @@ extension Dictionary {
         return nil
     }
 }
-
-

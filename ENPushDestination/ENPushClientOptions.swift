@@ -21,7 +21,6 @@
 //  Created by Anantha Krishnan K G on 08/02/22.
 //
 
-
 import Foundation
 
 /**
@@ -38,7 +37,7 @@ public class ENPushClientOptions: NSObject {
     var deviceId: String
     
     /// Push variables  - A Key value pair.
-    var pushVariables: [String:String]
+    var pushVariables: [String: String]
     
     // MARK: Initializers
     
@@ -77,7 +76,7 @@ public class ENPushClientOptions: NSObject {
      
      - parameter withDeviceId:  (Optional) The DeviceId for applications.
      */
-    public func setDeviceId(deviceId:String){
+    public func setDeviceId(deviceId: String) {
         self.deviceId = deviceId
         
     }
@@ -87,7 +86,7 @@ public class ENPushClientOptions: NSObject {
      
      - parameter categoryName: An array of `ENPushNotificationActionCategory`.
      */
-    public func setInteractiveNotificationCategories(categoryName category: [ENPushNotificationActionCategory]){
+    public func setInteractiveNotificationCategories(categoryName category: [ENPushNotificationActionCategory]) {
         self.category = category
     }
     
@@ -96,7 +95,7 @@ public class ENPushClientOptions: NSObject {
      
      - parameter pushVariables: a [String:String] values.
      */
-    public func  setPushVariables(pushVariables variables: [String:String]) {
+    public func  setPushVariables(pushVariables variables: [String: String]) {
         self.pushVariables = variables
     }
 }

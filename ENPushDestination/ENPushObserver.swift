@@ -24,6 +24,6 @@
 import Foundation
 
 /// Protocol for the Notification permission changes
-public protocol ENPushObserver{
-    func onChangePermission(status:Bool);
+public protocol ENPushObserver {
+    func onChangePermission(status: Bool)
 }

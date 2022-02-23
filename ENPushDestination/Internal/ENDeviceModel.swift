@@ -23,7 +23,6 @@
 
 import Foundation
 
-
 /**
  ENDeviceModel represents the iOS device registration payload.
  */

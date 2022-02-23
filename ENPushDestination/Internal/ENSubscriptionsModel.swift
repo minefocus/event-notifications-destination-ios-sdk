@@ -36,4 +36,3 @@ public struct ENSubscriptionsModel: Codable {
         case totalCount = "total_count"
     }
 }
-

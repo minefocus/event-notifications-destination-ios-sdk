@@ -44,16 +44,15 @@ class ENLogger {
     public static let sharedInstance = ENLogger()
     private init() {}
 
-    
     let INTERNAL_PREFIX = "eventnotifications.sdk."
-    var level = ENLogLevel.info;
+    var level = ENLogLevel.info
     var delegate: LogListener?
     
     func setLevel(_ newlevel: ENLogLevel) {
         level = newlevel
     }
     
-    func logger(logLevel: ENLogType, message: String, caller: String = #function, timeStamp: String = Date().description, object: Dictionary<String, Any>? = nil) {
+    func logger(logLevel: ENLogType, message: String, caller: String = #function, timeStamp: String = Date().description, object: [String: Any]? = nil) {
         if level == .debug {
             print("\(INTERNAL_PREFIX):\(caller) -> \(timeStamp)-\(logLevel) : \(message) , \(object?.description ?? "")")
             
@@ -64,5 +63,5 @@ class ENLogger {
 }
 
 public protocol LogListener {
-    func logger(logLevel: String, message: String, caller: String, timeStamp: String, object: Dictionary<String, Any>?)
+    func logger(logLevel: String, message: String, caller: String, timeStamp: String, object: [String: Any]?)
 }

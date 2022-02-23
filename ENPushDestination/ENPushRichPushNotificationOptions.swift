@@ -25,7 +25,7 @@ import Foundation
 import UserNotifications
 
 /// ENPushRichPushNotificationOptions Handles the mutable content attachments
-open class ENPushRichPushNotificationOptions:UNNotificationServiceExtension {
+open class ENPushRichPushNotificationOptions: UNNotificationServiceExtension {
     
     // MARK: - Public method
     
@@ -50,10 +50,10 @@ open class ENPushRichPushNotificationOptions:UNNotificationServiceExtension {
                         let tmpDirectory = NSTemporaryDirectory()
                         let tmpFile = "file://".appending(tmpDirectory).appending(fileUrl.lastPathComponent)
                         let tmpUrl = URL(string: tmpFile)!
-                        try! FileManager.default.moveItem(at: location, to: tmpUrl)
+                        try? FileManager.default.moveItem(at: location, to: tmpUrl)
                         
                         // Add the attachment to the notification content
-                        if let attachment = try? UNNotificationAttachment(identifier: "", url: tmpUrl, options:nil) {
+                        if let attachment = try? UNNotificationAttachment(identifier: "", url: tmpUrl, options: nil) {
 
                             bestAttemptContent?.attachments = [attachment]
                         }

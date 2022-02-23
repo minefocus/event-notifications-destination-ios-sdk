@@ -1,7 +1,7 @@
 /**
  (C) Copyright IBM Corp. 2021.
 
- Licensed under the Apache License, Version 2.0 (the "License");
+ Licensed under the Apache License, Version 2.0 (the "License")
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
@@ -23,7 +23,6 @@
 
 import Foundation
 
-
 internal class ENPushUrlBuilder: NSObject {
     
     internal let FORWARDSLASH = "/"
@@ -34,14 +33,14 @@ internal class ENPushUrlBuilder: NSObject {
     internal let AMPERSAND = "&"
     internal let QUESTIONMARK = "?"
     internal let EQUALTO = "="
-    internal let SUBSCRIPTIONS = "tag_subscriptions";
-    internal let TAGS = "tags";
-    internal let DEVICES = "devices";
-    internal let MESSAGES = "messages";
+    internal let SUBSCRIPTIONS = "tag_subscriptions"
+    internal let TAGS = "tags"
+    internal let DEVICES = "devices"
+    internal let MESSAGES = "messages"
 
-    internal let TAGNAME = "tag_name";
-    internal let DEVICEID = "device_id";
-    internal let defaultProtocol = "https";
+    internal let TAGNAME = "tag_name"
+    internal let DEVICEID = "device_id"
+    internal let defaultProtocol = "https"
     
     internal let HOST = "cloud.ibm.com"
     internal let HTTPS_SCHEME = "https://"
@@ -52,7 +51,6 @@ internal class ENPushUrlBuilder: NSObject {
     
 //    let DEFAULT_IAM_DEV_STAGE_URL = "https://iam.test.cloud.ibm.com/identity/token"
 
-    
     /**
      Init method
      - Parameter instanceId: instanceId of the Event Notifications service
@@ -100,9 +98,9 @@ internal class ENPushUrlBuilder: NSObject {
      - Parameter deviceId : deviceId for the Event Notifications service
      - Returns return the device ID url.
     */
-    func getDeviceIdUrl(deviceId:String) -> String {
+    func getDeviceIdUrl(deviceId: String) -> String {
         
-        var deviceIdUrl:String = getDevicesUrl()
+        var deviceIdUrl: String = getDevicesUrl()
         deviceIdUrl += FORWARDSLASH
         deviceIdUrl += deviceId
         return deviceIdUrl
@@ -123,7 +121,7 @@ internal class ENPushUrlBuilder: NSObject {
      - Parameter tagName: tagName for the subscription
      -  return subscriptions url
     */
-    func getAvailableSubscriptionsUrl(deviceId : String, tagName: String = "") -> String {
+    func getAvailableSubscriptionsUrl(deviceId: String, tagName: String = "") -> String {
         
         var subscriptionURL = getCollectionUrl(collectionName: SUBSCRIPTIONS)
         subscriptionURL += QUESTIONMARK
@@ -140,15 +138,14 @@ internal class ENPushUrlBuilder: NSObject {
      - Parameter deviceId: deviceId for the Event Notifications service
      - Returns unregister url.
     */
-    func getUnregisterUrl (deviceId : String) -> String {
+    func getUnregisterUrl (deviceId: String) -> String {
         
-        var deviceUnregisterUrl:String = getDevicesUrl()
+        var deviceUnregisterUrl: String = getDevicesUrl()
         deviceUnregisterUrl += FORWARDSLASH
         deviceUnregisterUrl += deviceId
         return deviceUnregisterUrl
     }
     
-
     /**
      Get rewrite domain
     - Returns rewrite domain url
@@ -159,9 +156,9 @@ internal class ENPushUrlBuilder: NSObject {
     }
     
     /// Return the base url + path
-    internal func getCollectionUrl (collectionName:String) -> String {
+    internal func getCollectionUrl (collectionName: String) -> String {
         
-        var collectionUrl:String = pwUrl_
+        var collectionUrl: String = pwUrl_
         collectionUrl += collectionName
         
         return collectionUrl

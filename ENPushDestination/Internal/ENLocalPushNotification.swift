@@ -24,10 +24,9 @@
 import UIKit
 import UserNotifications
 
-
 class ENLocalPushNotification: NSObject {
 
-    var builder : ENPushNotificationBuilder?
+    var builder: ENPushNotificationBuilder?
     
     // Optional array of attachments.
     open var attachments: String?
@@ -51,9 +50,9 @@ class ENLocalPushNotification: NSObject {
     open var title: String?
 
     // Apps can set the userInfo for locally scheduled notification requests. The contents of the push payload will be set as the userInfo for remote notifications.
-    open var userInfo: [AnyHashable : Any]?
+    open var userInfo: [AnyHashable: Any]?
 
-    public init(body bodyValue: String, title titleVlaue: String? = "", subtitle subtitleVlaue: String? = "", sound soundValue: String? = "", badge badgeVlaue: NSNumber? = 0, categoryIdentifier categoryIdentifierValue: String? = "", attachments attachmentsValue: String? = "", userInfo userInfoValue: [AnyHashable : Any]? = nil ) {
+    public init(body bodyValue: String, title titleVlaue: String? = "", subtitle subtitleVlaue: String? = "", sound soundValue: String? = "", badge badgeVlaue: NSNumber? = 0, categoryIdentifier categoryIdentifierValue: String? = "", attachments attachmentsValue: String? = "", userInfo userInfoValue: [AnyHashable: Any]? = nil) {
 
         self.attachments = attachmentsValue
         self.badge = badgeVlaue
@@ -103,9 +102,8 @@ class ENLocalPushNotification: NSObject {
                         if let attachment = try? UNNotificationAttachment(identifier: "", url: tmpUrl, options: nil) {
                             notification.attachments = [attachment]
                             let request = UNNotificationRequest(identifier: "ENLocalPushNotification", content: notification, trigger: notificationTrigger)
-                            //UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
                             if self.builder == nil {
-                                struct CustomBuilder: ENPushNotificationBuilder{}
+                                struct CustomBuilder: ENPushNotificationBuilder {}
                                 self.builder = CustomBuilder()
                             }
                             self.builder?.showENPushNotification(request: request)
@@ -117,7 +115,7 @@ class ENLocalPushNotification: NSObject {
             let request = UNNotificationRequest(identifier: "ENLocalPushNotification", content: notification, trigger: notificationTrigger)
            // UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
             if self.builder == nil {
-                struct CustomBuilder: ENPushNotificationBuilder{}
+                struct CustomBuilder: ENPushNotificationBuilder {}
                 self.builder = CustomBuilder()
             }
             builder?.showENPushNotification(request: request)
@@ -127,12 +125,11 @@ class ENLocalPushNotification: NSObject {
 }
 
 protocol ENPushNotificationBuilder {
-    func showENPushNotification(request:UNNotificationRequest)
+    func showENPushNotification(request: UNNotificationRequest)
 }
 
-
 extension ENPushNotificationBuilder {
-    func showENPushNotification(request:UNNotificationRequest) {
+    func showENPushNotification(request: UNNotificationRequest) {
         UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
     }
 }

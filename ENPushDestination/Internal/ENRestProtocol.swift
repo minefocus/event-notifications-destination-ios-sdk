@@ -1,4 +1,3 @@
-
 /**
  (C) Copyright IBM Corp. 2021.
  
@@ -26,7 +25,7 @@ import Foundation
 import IBMSwiftSDKCore
 
 protocol ENRestProtocol {
-    func responseObject<T:Decodable>(completionHandler: @escaping (T?, Int, String) -> Void)
+    func responseObject<T: Decodable>(completionHandler: @escaping (T?, Int, String) -> Void)
     func initRest(
         apikey: String,
         method: String,
@@ -52,7 +51,7 @@ class ENRestDefault: ENRestProtocol {
             
             var iamAuthenticator: IAMAuthenticator
             
-            if (!ENPush.overrideServerHost.isEmpty) {
+            if !ENPush.overrideServerHost.isEmpty {
                 iamAuthenticator = IAMAuthenticator(apiKey: apikey, url: DEFAULT_IAM_DEV_STAGE_URL)
             } else {
                 iamAuthenticator = IAMAuthenticator(apiKey: apikey)
@@ -61,10 +60,9 @@ class ENRestDefault: ENRestProtocol {
             self.request = RestRequest(session: self.session, authenticator: iamAuthenticator, errorResponseDecoder: self.errorResponseDecoder, method: method, url: url, headerParameters: headerParameters, queryItems: queryItems, messageBody: messageBody)
         }
     
-    func responseObject<T:Decodable>(completionHandler: @escaping (T?, Int, String) -> Void) {
+    func responseObject<T: Decodable>(completionHandler: @escaping (T?, Int, String) -> Void) {
         
-        
-        request?.responseObject { (response:RestResponse<T>?, error:RestError?) in
+        request?.responseObject { (response: RestResponse<T>?, error: RestError?) in
             
             guard error == nil else {
                 completionHandler(nil, response?.statusCode ?? ENPUSH_NETWORK_ERROR, error.debugDescription)
@@ -72,14 +70,14 @@ class ENRestDefault: ENRestProtocol {
             }
             
             guard response != nil, let statusCode = response?.statusCode else {
-                completionHandler(nil,response?.statusCode ?? ENPUSH_NETWORK_ERROR, "Empty response")
+                completionHandler(nil, response?.statusCode ?? ENPUSH_NETWORK_ERROR, "Empty response")
                 return
             }
             completionHandler(response?.result, statusCode, "")
         }
     }
     
-   private func responseDecoder(response:RestResponse<ENDeviceModel>?, error:RestError?) -> Int  {
+   private func responseDecoder(response: RestResponse<ENDeviceModel>?, error: RestError?) -> Int {
         
         guard error == nil else {
             
@@ -88,7 +86,6 @@ class ENRestDefault: ENRestProtocol {
                 if statusCode == ENPUSH_RESOURCE_NOT_FOUND_ERROR {
                     return statusCode!
                 }
-                break
             default :
                 ENLogger.sharedInstance.logger(logLevel: .error, message: "Error while verifying previous registration - Error is: \(error?.errorDescription ?? "")")
             }

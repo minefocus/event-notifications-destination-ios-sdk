@@ -23,7 +23,6 @@
 
 import Foundation
 
-
 public enum ENPushErrorvalues: Int {
     
     /// - ENPushErrorInternalError: Denotes the Internal Server Error occured.

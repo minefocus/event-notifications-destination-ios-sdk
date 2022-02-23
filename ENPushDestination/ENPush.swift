@@ -1,4 +1,3 @@
-
 /**
  (C) Copyright IBM Corp. 2021.
  
@@ -21,22 +20,20 @@
 //  Created by Anantha Krishnan K G on 08/02/22.
 //
 
-
-
 import Foundation
 import UIKit
 
 public class ENPush: NSObject {
     
     // MARK: Properties (Private)
-    private var notificationOptions : ENPushClientOptions?
+    private var notificationOptions: ENPushClientOptions?
     
     // MARK: Properties (Public)
     let enNotificationName = UIApplication.didBecomeActiveNotification
     let applicationBGstate =  UIApplication.State.background
     
     // used to test in test zone and dev zone
-    public static var overrideServerHost = "";
+    public static var overrideServerHost = ""
     
     // MARK: - Properties
     
@@ -71,16 +68,15 @@ public class ENPush: NSObject {
     public private(set) var guid: String?
     public private(set) var destinationId: String?
     public private(set) var apikey: String?
-    public var delegate:ENPushObserver?
-    var networkRequest:ENRestProtocol = ENRestDefault()
+    public var delegate: ENPushObserver?
+    var networkRequest: ENRestProtocol = ENRestDefault()
 
     private var deviceId: String?
     private var region: Region?
     
     // Notification Count
-    private var notificationcount:Int = 0
-    private var isInitialized = false;
-    
+    private var notificationcount: Int = 0
+    private var isInitialized = false
     
     /**
      Set the cloud region.
@@ -102,7 +98,7 @@ public class ENPush: NSObject {
      Set the logger level for SDK. Default value is `debug`.
      - Parameters level: Log level value ie; debug or info.
      */
-    public func setLoggerLevel(_ level : ENLogLevel) {
+    public func setLoggerLevel(_ level: ENLogLevel) {
         ENLogger.sharedInstance.setLevel(level)
     }
     
@@ -134,7 +130,7 @@ public class ENPush: NSObject {
             ENPushUtils.saveValueToStorage(destinationId.getData(), key: ENPUSH_DESTINATION_ID)
             ENPushUtils.saveValueToStorage(apikey.getData(), key: ENPUSH_APIKEY)
             
-            isInitialized = true;
+            isInitialized = true
             self.deviceId = ""
             
             UserDefaults.standard.set(false, forKey: HAS_ENPUSH_VARIABLES)
@@ -170,9 +166,9 @@ public class ENPush: NSObject {
             ENPushUtils.saveValueToStorage(destinationId.getData(), key: ENPUSH_DESTINATION_ID)
             ENPushUtils.saveValueToStorage(apikey.getData(), key: ENPUSH_APIKEY)
             
-            isInitialized = true;
+            isInitialized = true
             self.deviceId = options.deviceId
-            let category : [ENPushNotificationActionCategory] = options.category
+            let category: [ENPushNotificationActionCategory] = options.category
             
             self.notificationOptions = options
             
@@ -186,19 +182,19 @@ public class ENPush: NSObject {
             
             let center = UNUserNotificationCenter.current()
             
-            var notifCategory = Set<UNNotificationCategory>();
+            var notifCategory = Set<UNNotificationCategory>()
             
             for singleCategory in category {
                 
-                let categoryFirst : ENPushNotificationActionCategory = singleCategory
-                let pushCategoryIdentifier : String = categoryFirst.identifier
-                let pushNotificationAction : [ENPushNotificationAction] = categoryFirst.actions
+                let categoryFirst: ENPushNotificationActionCategory = singleCategory
+                let pushCategoryIdentifier: String = categoryFirst.identifier
+                let pushNotificationAction: [ENPushNotificationAction] = categoryFirst.actions
                 var pushActionsArray = [UNNotificationAction]()
                 
                 for actionButton in pushNotificationAction {
                     
-                    let newActionButton : ENPushNotificationAction = actionButton
-                    let options:UNNotificationActionOptions = actionButton.activationMode
+                    let newActionButton: ENPushNotificationAction = actionButton
+                    let options: UNNotificationActionOptions = actionButton.activationMode
                     
                     let addButton = UNNotificationAction(identifier: newActionButton.identifier, title: newActionButton.title, options: [options])
                     pushActionsArray.append(addButton)
@@ -232,20 +228,20 @@ public class ENPush: NSObject {
      - Parameter withUserId: This is the userId value.
      - Parameter completionHandler: The closure that will be called when this request finishes. The response will contain response (String), StatusCode (Int) and error (string).
      */
-    public func registerWithDeviceToken(deviceToken:Data , withUserId:String, completionHandler: @escaping(_ response:ENDeviceModel?, _ statusCode:Int?, _ error:String) -> Void) {
+    public func registerWithDeviceToken(deviceToken: Data, withUserId: String, completionHandler: @escaping(_ response: ENDeviceModel?, _ statusCode: Int?, _ error: String) -> Void) {
         
-        if (isInitialized) {
+        if isInitialized {
             
-            if (validateString(object: withUserId)) {
+            if validateString(object: withUserId) {
                 registerForDestination(deviceToken: deviceToken, userId: withUserId, completionHandler: completionHandler)
             } else {
                 ENLogger.sharedInstance.logger(logLevel: .error, message: "Error while registration - Provide a valid userId value")
                 
-                completionHandler(nil, ENPushErrorvalues.ENPushRegistrationError.rawValue , "Error while registration - Provide a valid userId value")
+                completionHandler(nil, ENPushErrorvalues.ENPushRegistrationError.rawValue, "Error while registration - Provide a valid userId value")
             }
         } else {
             ENLogger.sharedInstance.logger(logLevel: .error, message: "Error while registration - ENPush is not initialized")
-            completionHandler(nil, ENPushErrorvalues.ENPushRegistrationError.rawValue , "Error while registration - ENPush is not initialized")
+            completionHandler(nil, ENPushErrorvalues.ENPushRegistrationError.rawValue, "Error while registration - ENPush is not initialized")
         }
         
     }
@@ -259,12 +255,12 @@ public class ENPush: NSObject {
      - Parameter deviceToken: This is the response we get from the push registartion in APNs.
      - Parameter completionHandler: The closure that will be called when this request finishes. The response will contain response (String), StatusCode (Int) and error (string).
      */
-    public func registerWithDeviceToken (deviceToken:Data, completionHandler: @escaping(_ response:ENDeviceModel?, _ statusCode:Int?, _ error:String) -> Void) {
-        if (isInitialized) {
+    public func registerWithDeviceToken (deviceToken: Data, completionHandler: @escaping(_ response: ENDeviceModel?, _ statusCode: Int?, _ error: String) -> Void) {
+        if isInitialized {
             registerForDestination(deviceToken: deviceToken, completionHandler: completionHandler)
         } else {
             ENLogger.sharedInstance.logger(logLevel: .error, message: "Error while registration - ENPush is not initialized")
-            completionHandler(nil, ENPushErrorvalues.ENPushRegistrationError.rawValue , "Error while registration - ENPush is not initialized")
+            completionHandler(nil, ENPushErrorvalues.ENPushRegistrationError.rawValue, "Error while registration - ENPush is not initialized")
         }
     }
     
@@ -276,22 +272,22 @@ public class ENPush: NSObject {
      - parameter tagName: the tag name.
      - Parameter completionHandler: The closure that will be called when this request finishes. The response will contain response (ENTagModel), StatusCode (Int) and error (string).
      */
-    public func subscribeToTags (tagName:String, completionHandler: @escaping (_ response:ENTagModel?, _ statusCode:Int?, _ error:String) -> Void) {
+    public func subscribeToTags (tagName: String, completionHandler: @escaping (_ response: ENTagModel?, _ statusCode: Int?, _ error: String) -> Void) {
         
-        ENLogger.sharedInstance.logger(logLevel: .debug, message:"Entering: subscribeToTags." )
+        ENLogger.sharedInstance.logger(logLevel: .debug, message: "Entering: subscribeToTags." )
         
         let devId = self.getDeviceID()
         
         if !checkForCredentials() {
             
             ENLogger.sharedInstance.logger(logLevel: .error, message: "Error while subscribing to tag - Error is: push is not initialized")
-            completionHandler(nil, ENPushErrorvalues.ENPushTagSubscriptionError.rawValue , "Error while subscribing to tag - Error is: push is not initialized")
+            completionHandler(nil, ENPushErrorvalues.ENPushTagSubscriptionError.rawValue, "Error while subscribing to tag - Error is: push is not initialized")
             return
             
         }
         
         let urlBuilder = ENPushUrlBuilder(instanceId: self.guid!, destinationId: self.destinationId!)
-        let resourceURL:String = urlBuilder.getSubscriptionsUrl()
+        let resourceURL: String = urlBuilder.getSubscriptionsUrl()
         let headers = urlBuilder.getHeader()
         
 //        var iamAuthenticator: IAMAuthenticator
@@ -316,25 +312,23 @@ public class ENPush: NSObject {
         
         networkRequest.initRest(apikey: self.apikey!, method: "POST", url: resourceURL, headerParameters: headers, queryItems: nil, messageBody: data)
         
-        networkRequest.responseObject {[weak self] (response:ENTagModel?, statusCode: Int, error:String)  in
-            
-        
-       // request.responseObject { [weak self] (response:RestResponse<ENTagModel>?, error:RestError?) in
+        networkRequest.responseObject {[weak self] (response: ENTagModel?, statusCode: Int, error: String)  in
+                    
             guard self != nil else {
                 ENLogger.sharedInstance.logger(logLevel: .error, message: "Error while subscribed to tag - Error is: Lost class reference")
-                completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue , "Error while subscribed to tag - Error is: Lost class reference")
+                completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue, "Error while subscribed to tag - Error is: Lost class reference")
 
                 return
             }
             guard error.isEmpty else {
                 ENLogger.sharedInstance.logger(logLevel: .error, message: "Error while subscribed to tag - Error is: \(error.debugDescription)")
-                completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue , "Error while registration - Error is: \(error.debugDescription)")
+                completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue, "Error while registration - Error is: \(error.debugDescription)")
                 return
             }
             
             guard let response = response else {
                 ENLogger.sharedInstance.logger(logLevel: .error, message: "Error while subscribed to tag - Error is: Empty response")
-                completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue , "Error while subscribed to tag - Error is: Empty response")
+                completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue, "Error while subscribed to tag - Error is: Empty response")
                 return
             }
             
@@ -342,7 +336,7 @@ public class ENPush: NSObject {
                 ENLogger.sharedInstance.logger(logLevel: .error, message: "Successfully subscribed to tag - Response is:  \(String(describing: response))")
                 completionHandler(response, statusCode, "")
             } else {
-                ENLogger.sharedInstance.logger(logLevel: .error, message:  "Error while subscribing to tag - Error code is:: \(statusCode) and error is: \(String(describing: response))")
+                ENLogger.sharedInstance.logger(logLevel: .error, message: "Error while subscribing to tag - Error code is:: \(statusCode) and error is: \(String(describing: response))")
                 completionHandler(nil, ENPushErrorvalues.ENPushRegistrationError.rawValue, "Error while subscribing to tag - Error code is: \(statusCode) and error is: \(String(describing: response))")
             }
         }
@@ -355,7 +349,7 @@ public class ENPush: NSObject {
      
      - Parameter completionHandler: The closure that will be called when this request finishes. The response will contain response (NSMutableArray), StatusCode (Int) and error (string).
      */
-    public func retrieveSubscriptionsWithCompletionHandler  (completionHandler: @escaping (_ response:ENSubscriptionsModel?, _ statusCode:Int?, _ error:String) -> Void) {
+    public func retrieveSubscriptionsWithCompletionHandler  (completionHandler: @escaping (_ response: ENSubscriptionsModel?, _ statusCode: Int?, _ error: String) -> Void) {
         
         ENLogger.sharedInstance.logger(logLevel: .debug, message: "Entering retrieveSubscriptionsWithCompletitionHandler.")
         
@@ -364,13 +358,13 @@ public class ENPush: NSObject {
         if !checkForCredentials() {
             
             ENLogger.sharedInstance.logger(logLevel: .debug, message: "Error while retrieving subscriptions - Error is: push is not initialized")
-            completionHandler(nil, ENPushErrorvalues.ENPushTagSubscriptionError.rawValue , "Error while retrieving subscriptions - Error is: push is not initialized")
+            completionHandler(nil, ENPushErrorvalues.ENPushTagSubscriptionError.rawValue, "Error while retrieving subscriptions - Error is: push is not initialized")
             return
             
         }
         
         let urlBuilder = ENPushUrlBuilder(instanceId: self.guid!, destinationId: self.destinationId!)
-        let resourceURL:String = urlBuilder.getAvailableSubscriptionsUrl(deviceId: devId)
+        let resourceURL: String = urlBuilder.getAvailableSubscriptionsUrl(deviceId: devId)
         let headers = urlBuilder.getHeader()
         
 //        var iamAuthenticator: IAMAuthenticator
@@ -392,25 +386,23 @@ public class ENPush: NSObject {
 //                                  messageBody: nil)
         
         networkRequest.initRest(apikey: self.apikey!, method: "GET", url: resourceURL, headerParameters: headers, queryItems: nil, messageBody: nil)
-        networkRequest.responseObject { [weak self] (response:ENSubscriptionsModel?, statusCode: Int, error:String)in
-            
-        
-        //request.responseObject { [weak self] (response:RestResponse<ENSubscriptionsModel>?, error:RestError?) in
+        networkRequest.responseObject { [weak self] (response: ENSubscriptionsModel?, statusCode: Int, error: String)in
+                    
             guard self != nil else {
                 ENLogger.sharedInstance.logger(logLevel: .error, message: "Error while retrieving subscriptions - Error is: Lost class reference")
-                completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue , "Error while retrieving subscriptions - Error is: Lost class reference")
+                completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue, "Error while retrieving subscriptions - Error is: Lost class reference")
 
                 return
             }
             guard error.isEmpty else {
                 ENLogger.sharedInstance.logger(logLevel: .error, message: "Error while retrieving subscriptions - Error is: \(error.debugDescription)")
-                completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue , "Error while retrieving subscriptions - Error is: \(error.debugDescription)")
+                completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue, "Error while retrieving subscriptions - Error is: \(error.debugDescription)")
                 return
             }
             
             guard let response = response else {
                 ENLogger.sharedInstance.logger(logLevel: .error, message: "Error while retrieving subscriptions - Error is: Empty response")
-                completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue , "Error while retrieving subscriptions - Error is: Empty response")
+                completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue, "Error while retrieving subscriptions - Error is: Empty response")
                 return
             }
             
@@ -418,7 +410,7 @@ public class ENPush: NSObject {
                 ENLogger.sharedInstance.logger(logLevel: .error, message: "Subscription retrieved successfully - Response is:  \(String(describing: response))")
                 completionHandler(response, statusCode, "")
             } else {
-                ENLogger.sharedInstance.logger(logLevel: .error, message:  "Error while retrieving subscriptions - Error code is:: \(statusCode) and error is: \(String(describing: response))")
+                ENLogger.sharedInstance.logger(logLevel: .error, message: "Error while retrieving subscriptions - Error code is:: \(statusCode) and error is: \(String(describing: response))")
                 completionHandler(nil, ENPushErrorvalues.ENPushRegistrationError.rawValue, "Error while retrieving subscriptions - Error code is: \(statusCode) and error is: \(String(describing: response))")
             }
         }
@@ -432,7 +424,7 @@ public class ENPush: NSObject {
      - parameter tagName: the tag name.
      - Parameter completionHandler: The closure that will be called when this request finishes. The response will contain response (NSMutableDictionary), StatusCode (Int) and error (string).
      */
-    public func unsubscribeFromTags(tagName:String, completionHandler: @escaping (_ response:String?, _ statusCode:Int?, _ error:String) -> Void) {
+    public func unsubscribeFromTags(tagName: String, completionHandler: @escaping (_ response: String?, _ statusCode: Int?, _ error: String) -> Void) {
         
         ENLogger.sharedInstance.logger(logLevel: .error, message: "Entering: unsubscribeFromTags")
         
@@ -441,13 +433,13 @@ public class ENPush: NSObject {
         if !checkForCredentials() {
             
             ENLogger.sharedInstance.logger(logLevel: .error, message: "Error while unsubscribing from tags - Error is: push is not initialized")
-            completionHandler("", ENPushErrorvalues.ENPushTagUnsubscriptionError.rawValue , "Error while unsubscribing from tags - Error is: push is not initialized")
+            completionHandler("", ENPushErrorvalues.ENPushTagUnsubscriptionError.rawValue, "Error while unsubscribing from tags - Error is: push is not initialized")
             return
             
         }
         
         let urlBuilder = ENPushUrlBuilder(instanceId: self.guid!, destinationId: self.destinationId!)
-        let resourceURL:String = urlBuilder.getAvailableSubscriptionsUrl(deviceId: devId, tagName: tagName)
+        let resourceURL: String = urlBuilder.getAvailableSubscriptionsUrl(deviceId: devId, tagName: tagName)
         let headers = urlBuilder.getHeader()
         
 //        var iamAuthenticator: IAMAuthenticator
@@ -469,26 +461,23 @@ public class ENPush: NSObject {
 //                                  messageBody: nil)
         
         networkRequest.initRest(apikey: self.apikey!, method: "DELETE", url: resourceURL, headerParameters: headers, queryItems: nil, messageBody: nil)
-        networkRequest.responseObject { [weak self] (response:ENSubscriptionsModel?, statusCode: Int, error:String) in
+        networkRequest.responseObject { [weak self] (response: ENSubscriptionsModel?, statusCode: Int, error: String) in
             
-        //}
-        
-       // request.responseObject { [weak self] (response:RestResponse<ENSubscriptionsModel>?, error:RestError?) in
             guard self != nil else {
                 ENLogger.sharedInstance.logger(logLevel: .error, message: "Error while unsubscribing from tags - Error is: Lost class reference")
-                completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue , "Error while unsubscribing from tags - Error is: Lost class reference")
+                completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue, "Error while unsubscribing from tags - Error is: Lost class reference")
 
                 return
             }
             guard error.isEmpty else {
                 ENLogger.sharedInstance.logger(logLevel: .error, message: "Error while unsubscribing from tags - Error is: \(error.debugDescription)")
-                completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue , "Error while unsubscribing from tags - Error is: \(error.debugDescription)")
+                completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue, "Error while unsubscribing from tags - Error is: \(error.debugDescription)")
                 return
             }
             
             guard let response = response else {
                 ENLogger.sharedInstance.logger(logLevel: .error, message: "Error while unsubscribing from tags - Error is: Empty response")
-                completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue , "Error while unsubscribing from tags - Error is: Empty response")
+                completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue, "Error while unsubscribing from tags - Error is: Empty response")
                 return
             }
             
@@ -496,7 +485,7 @@ public class ENPush: NSObject {
                 ENLogger.sharedInstance.logger(logLevel: .error, message: "Successfully unsubscribed from tags - Response is: \(String(describing: response))")
                 completionHandler(String(describing: response), statusCode, "")
             } else {
-                ENLogger.sharedInstance.logger(logLevel: .error, message:  "Error while unsubscribing from tags - Error code is:: \(statusCode) and error is: \(String(describing: response))")
+                ENLogger.sharedInstance.logger(logLevel: .error, message: "Error while unsubscribing from tags - Error code is:: \(statusCode) and error is: \(String(describing: response))")
                 completionHandler(nil, ENPushErrorvalues.ENPushRegistrationError.rawValue, "Error while unsubscribing from tags - Error code is: \(statusCode) and error is: \(String(describing: response))")
             }
         }
@@ -508,7 +497,7 @@ public class ENPush: NSObject {
      
      - Parameter completionHandler: The closure that will be called when this request finishes. The response will contain response (String), StatusCode (Int) and error (string).
      */
-    public func unregisterDevice(completionHandler: @escaping (_ response:String?, _ statusCode:Int?, _ error:String) -> Void) {
+    public func unregisterDevice(completionHandler: @escaping (_ response: String?, _ statusCode: Int?, _ error: String) -> Void) {
         
         ENLogger.sharedInstance.logger(logLevel: .error, message: "Entering unregisterDevice.")
         let devId = self.getDeviceID()
@@ -516,37 +505,36 @@ public class ENPush: NSObject {
         if !checkForCredentials() {
             
             ENLogger.sharedInstance.logger(logLevel: .error, message: "Error while unregistering device - Error is: push is not initialized")
-            completionHandler("", ENPushErrorvalues.ENPushTagUnsubscriptionError.rawValue , "Error while unregistering device - Error is: push is not initialized")
+            completionHandler("", ENPushErrorvalues.ENPushTagUnsubscriptionError.rawValue, "Error while unregistering device - Error is: push is not initialized")
             return
             
         }
         
         let urlBuilder = ENPushUrlBuilder(instanceId: self.guid!, destinationId: self.destinationId!)
-        let resourceURL:String = urlBuilder.getUnregisterUrl(deviceId: devId)
+        let resourceURL: String = urlBuilder.getUnregisterUrl(deviceId: devId)
         
         let headers = urlBuilder.getHeader()
         
         networkRequest.initRest(apikey: self.apikey!, method: "DELETE", url: resourceURL, headerParameters: headers, queryItems: nil, messageBody: nil)
         
-        
-        networkRequest.responseObject { [weak self] (response:ENSubscriptionsModel?, statusCode: Int, error:String) in
+        networkRequest.responseObject { [weak self] (response: ENSubscriptionsModel?, statusCode: Int, error: String) in
 
             guard self != nil else {
                 ENLogger.sharedInstance.logger(logLevel: .error, message: "Error while unregistering device - Error is: Lost class reference")
-                completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue , "Error while unregistering device - Error is: Lost class reference")
+                completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue, "Error while unregistering device - Error is: Lost class reference")
 
                 return
             }
             guard error.isEmpty else {
                 ENLogger.sharedInstance.logger(logLevel: .error, message: "Error while unregistering device - Error is: \(error.debugDescription)")
-                completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue , "Error while unregistering device - Error is: \(error.debugDescription)")
+                completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue, "Error while unregistering device - Error is: \(error.debugDescription)")
                 return
             }
             
 //            guard response != nil, let statusCode = response?.statusCode else {
             guard let response = response else {
                 ENLogger.sharedInstance.logger(logLevel: .error, message: "Error while unregistering device - Error is: Empty response")
-                completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue , "Error while unregistering device - Error is: Empty response")
+                completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue, "Error while unregistering device - Error is: Empty response")
                 return
             }
             
@@ -554,7 +542,7 @@ public class ENPush: NSObject {
                 ENLogger.sharedInstance.logger(logLevel: .error, message: "Successfully unregistered the device")
                 completionHandler(String(describing: response), statusCode, "")
             } else {
-                ENLogger.sharedInstance.logger(logLevel: .error, message:  "Error while unregistering device - Error code is:: \(statusCode) and error is: \(String(describing: response))")
+                ENLogger.sharedInstance.logger(logLevel: .error, message: "Error while unregistering device - Error code is:: \(statusCode) and error is: \(String(describing: response))")
                 completionHandler(nil, ENPushErrorvalues.ENPushRegistrationError.rawValue, "Error while unregistering device - Error code is: \(statusCode) and error is: \(String(describing: response))")
             }
         }
@@ -565,11 +553,7 @@ public class ENPush: NSObject {
      - Parameter userInfo: Push Notification userInfo object.
      - Parameter completionHandler: The closure that will be called when this request finishes. The response will contain response (String) and, error (string).
      */
-    public func didReciveBMSPushNotification (userInfo: [AnyHashable : Any], completionHandler: @escaping (_ response:String?, _ error:String) -> Void) {
-        
-        
-        //let payload = userInfo as NSDictionary
-        
+    public func didReciveBMSPushNotification (userInfo: [AnyHashable: Any], completionHandler: @escaping (_ response: String?, _ error: String) -> Void) {
         
         guard let hasTemplate = userInfo["has-template"] as? Int  else {
             completionHandler("", "Not a template based push Notification")
@@ -578,16 +562,16 @@ public class ENPush: NSObject {
         if hasTemplate == 1 {
             
             let payload = userInfo as NSDictionary
-            var additionalPaylaod: [AnyHashable : Any] = [:]
+            var additionalPaylaod: [AnyHashable: Any] = [:]
             var alertBody: String = ""
             var title: String = ""
             var subTitle: String = ""
             var categoryIdentifier: String = ""
             var sound: String = ""
-            var attachmentURL:String = ""
-            var badge:NSNumber = 0
+            var attachmentURL: String = ""
+            var badge: NSNumber = 0
             
-            if let additionalJson = payload.value(forKey: "payload") as? [AnyHashable : Any], additionalJson.count != 0 {
+            if let additionalJson = payload.value(forKey: "payload") as? [AnyHashable: Any], additionalJson.count != 0 {
                 additionalPaylaod = additionalJson
             }
             
@@ -602,7 +586,7 @@ public class ENPush: NSObject {
             }
             
             if let message = alertJson.value(forKey: "body") as? String {
-                alertBody = ENPushUtils.checkTemplateNotifications(message);
+                alertBody = ENPushUtils.checkTemplateNotifications(message)
             }
             
             if let titleValue = alertJson.value(forKey: "title") as? String {
@@ -647,52 +631,48 @@ public class ENPush: NSObject {
      - Parameter userId: This is the userId value.
      - Parameter completionHandler: The closure that will be called when this request finishes. The response will contain response (String), StatusCode (Int) and error (string).
      */
-    fileprivate func registerForDestination(deviceToken:Data , userId:String = "", completionHandler: @escaping(ENDeviceModel?,Int?, String) -> Void) {
+    fileprivate func registerForDestination(deviceToken: Data, userId: String = "", completionHandler: @escaping(ENDeviceModel?, Int?, String) -> Void) {
         
         let devId = self.getDeviceID()
         ENPushUtils.saveValueToStorage(devId.getData(), key: ENPUSH_DEVICE_ID)
         var token = ""
         for i in 0..<deviceToken.count {
-            token = token + String(format: "%02.2hhx", arguments: [deviceToken[i]])
+            token += String(format: "%02.2hhx", arguments: [deviceToken[i]])
         }
         print(token)
         
         if !checkForCredentials() {
             
             ENLogger.sharedInstance.logger(logLevel: .error, message: "Error while registration - Error is: SDK is not initialized")
-            completionHandler(nil, ENPushErrorvalues.ENPushRegistrationError.rawValue , "Error while registration - Error is: SDK is not initialized")
+            completionHandler(nil, ENPushErrorvalues.ENPushRegistrationError.rawValue, "Error while registration - Error is: SDK is not initialized")
             return
         }
         
         let urlBuilder = ENPushUrlBuilder(instanceId: self.guid!, destinationId: self.destinationId!)
-        let resourceURL:String = urlBuilder.getDeviceIdUrl(deviceId: devId)
+        let resourceURL: String = urlBuilder.getDeviceIdUrl(deviceId: devId)
         let headers = urlBuilder.getHeader()
         
         ENLogger.sharedInstance.logger(logLevel: .debug, message: "Verifying previous device registration.")
 
-        
         networkRequest.initRest(apikey: self.apikey!, method: "GET", url: resourceURL, headerParameters: headers, queryItems: nil, messageBody: nil)
 
-        
         networkRequest.responseObject { [weak self] (response: ENDeviceModel?, statusCode: Int, error: String) in
                     
             guard let self = self else {
                 ENLogger.sharedInstance.logger(logLevel: .error, message: "Error while verifying previous registration - Error is: Lost class reference")
-                completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue , "Error while verifying previous registration - Error is: Lost class reference")
+                completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue, "Error while verifying previous registration - Error is: Lost class reference")
 
                 return
             }
-            
-            //let statusCode = self.responseDecoder(response: response, error: error)
-            
-            var resourceURL:String = ""
+                        
+            var resourceURL: String = ""
             let headers = urlBuilder.getHeader()
-            var data:Data?
+            var data: Data?
             var method = "POST"
 
             if statusCode == ENPUSH_RESOURCE_NOT_FOUND_ERROR {
                 
-                ENLogger.sharedInstance.logger(logLevel: .debug, message:  "Device is not registered before.  Registering for the first time.")
+                ENLogger.sharedInstance.logger(logLevel: .debug, message: "Device is not registered before.  Registering for the first time.")
                 resourceURL = urlBuilder.getDevicesUrl()
                 if userId.isEmpty {
                     let dataString =  "{\"\(ENPUSH_DEVICE_ID)\": \"\(devId)\", \"\(ENPUSH_TOKEN)\": \"\(token)\", \"\(ENPUSH_PLATFORM)\": \"A\"}"
@@ -705,7 +685,7 @@ public class ENPush: NSObject {
                 
             } else if statusCode == 200 {
                 
-                ENLogger.sharedInstance.logger(logLevel: .debug, message:  "Device is already registered.")
+                ENLogger.sharedInstance.logger(logLevel: .debug, message: "Device is already registered.")
               //  let respDevice = response?.result
                 
                 let rToken = response?.token ?? ""
@@ -739,27 +719,26 @@ public class ENPush: NSObject {
                 return
             }
             
-            
             self.networkRequest.initRest(apikey: self.apikey!, method: method, url: resourceURL, headerParameters: headers, queryItems: nil, messageBody: data)
             
-            self.networkRequest.responseObject { [weak self] (response:ENDeviceModel?, statusCode: Int, error: String) in
+            self.networkRequest.responseObject { [weak self] (response: ENDeviceModel?, statusCode: Int, error: String) in
    
                 guard self != nil else {
                     ENLogger.sharedInstance.logger(logLevel: .error, message: "Error while registration - Error is: Lost class reference")
-                    completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue , "Error while verifying previous registration - Error is: Lost class reference")
+                    completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue, "Error while verifying previous registration - Error is: Lost class reference")
 
                     return
                 }
                 guard error.isEmpty else {
                     ENLogger.sharedInstance.logger(logLevel: .error, message: "Error while registration - Error is: \(error.debugDescription)")
-                    completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue , "Error while registration - Error is: \(error.debugDescription)")
+                    completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue, "Error while registration - Error is: \(error.debugDescription)")
                     return
                 }
                 
 //                guard response != nil, let statusCode = response?.statusCode else {
                 guard let response = response else {
                     ENLogger.sharedInstance.logger(logLevel: .error, message: "Error while registration - Error is: Empty response")
-                    completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue , "Error while registration - Error is: Empty response")
+                    completionHandler(nil, ENPushErrorvalues.ENPushRegistrationVerificationError.rawValue, "Error while registration - Error is: Empty response")
                     return
                 }
                 
@@ -767,7 +746,7 @@ public class ENPush: NSObject {
                     ENLogger.sharedInstance.logger(logLevel: .error, message: "Response of device registration - Response is: \(response) registered")
                     completionHandler(response, statusCode, "")
                 } else {
-                    ENLogger.sharedInstance.logger(logLevel: .error, message:  "Error during device registration - Error code is: \(statusCode) and error is: \(String(describing: response))")
+                    ENLogger.sharedInstance.logger(logLevel: .error, message: "Error during device registration - Error code is: \(statusCode) and error is: \(String(describing: response))")
                     completionHandler(nil, ENPushErrorvalues.ENPushRegistrationError.rawValue, "Error during device registration - Error code is: \(statusCode) and error is: \(String(describing: response))")
                 }
             }
@@ -780,9 +759,9 @@ public class ENPush: NSObject {
      validate the object for empty values or null
      - Parameter object: input string to be checked.
      */
-    fileprivate func validateString(object:String) -> Bool{
-        if (object.isEmpty || object == "") {
-            return false;
+    fileprivate func validateString(object: String) -> Bool {
+        if object.isEmpty || object == "" {
+            return false
         }
         return true
     }
@@ -791,12 +770,12 @@ public class ENPush: NSObject {
      Get deviceID for the ios device.
      - Returns : valid UUID string.
      */
-    fileprivate func getDeviceID() -> String{
+    fileprivate func getDeviceID() -> String {
         var devId = String()
-        if ((self.deviceId == nil) || (self.deviceId?.isEmpty)!) {
+        if self.deviceId == nil || self.deviceId!.isEmpty {
             // Generate new ID
             devId = UIDevice.current.identifierForVendor?.uuidString ?? ""
-        }else{
+        } else {
             devId = self.deviceId!
         }
         return devId
@@ -813,7 +792,7 @@ public class ENPush: NSObject {
             return
         }
         center.requestAuthorization(options: [.alert, .badge, .sound], completionHandler: { (granted, error) in
-            if(granted) {
+            if granted {
                 DispatchQueue.main.async {
                     UIApplication.shared.registerForRemoteNotifications()
                 }
@@ -836,7 +815,7 @@ public class ENPush: NSObject {
         self.destinationId = ENPushUtils.getValueFromStorage(key: ENPUSH_DESTINATION_ID)?.getString()
         self.apikey = ENPushUtils.getValueFromStorage(key: ENPUSH_APIKEY)?.getString()
         
-        if(self.guid == "" || self.destinationId == "" || self.apikey == "") {
+        if self.guid == "" || self.destinationId == "" || self.apikey == "" {
             return false
         }
         return true
@@ -847,12 +826,12 @@ public class ENPush: NSObject {
      */
     fileprivate func checkStatusChange() {
         
-        if(UserDefaults.standard.object(forKey: ENPUSH_APP_INSTALL) != nil) {
+        if UserDefaults.standard.object(forKey: ENPUSH_APP_INSTALL) != nil {
             statusChangeHeloper()
         } else {
             UserDefaults.standard.set(true, forKey: ENPUSH_APP_INSTALL)
             UserDefaults.standard.synchronize()
-            NotificationCenter.default.addObserver(forName: enNotificationName, object: nil, queue: OperationQueue.main) { (notifiction) in
+            NotificationCenter.default.addObserver(forName: enNotificationName, object: nil, queue: OperationQueue.main) { _ in
                 let when = DispatchTime.now() + 1
                 DispatchQueue.main.asyncAfter(deadline: when) { [weak self] in
                     self?.statusChangeHeloper()
@@ -870,12 +849,10 @@ public class ENPush: NSObject {
                 DispatchQueue.main.async {
                     UIApplication.shared.registerForRemoteNotifications()
                 }
-                break
-            default:
+            default :
                 ENLogger.sharedInstance.logger(logLevel: .info, message: "Push Disabled")
                 self.delegate?.onChangePermission(status: false)
             }
         }
     }
-    
 }
