@@ -10,14 +10,11 @@ before_install:
   - rvm install 2.4.0
 
 install:
-  - gem install slather
   - gem install cocoapods
-  - gem install jazzy
 
 script:
   - pod update
   - pod lib lint --allow-warnings
-  - carthage update
   - xcodebuild clean build -workspace ENPushDestination.xcworkspace -scheme ENPushDestination CODE_SIGNING_REQUIRED=NO SUPPORTS_MACCATALYST=NO -destination "generic/platform=iOS Simulator"
 
   - if [[ "${TRAVIS_JOB_NUMBER}" = *".1"* ]]; then
