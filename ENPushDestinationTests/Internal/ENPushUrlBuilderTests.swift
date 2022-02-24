@@ -46,7 +46,7 @@ class ENPushUrlBuilderTests: XCTestCase {
         
         XCTAssertNotNil(sut, "ENPushUrlBuilder object should be valid")
         
-        let expectedBaseUrl = "https://us-south.cloud.ibm.com/event-notifications/v1/instances/\(mockInstanceId)/destinations/\(mockDestinationId)"
+        let expectedBaseUrl = "https://us-south.event-notifications.cloud.ibm.com/event-notifications/v1/instances/\(mockInstanceId)/destinations/\(mockDestinationId)"
         
         var expectedUrl = expectedBaseUrl + "/devices"
         var resultUrl = sut.getDevicesUrl()
