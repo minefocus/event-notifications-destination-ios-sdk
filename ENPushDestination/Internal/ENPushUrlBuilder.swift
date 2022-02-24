@@ -67,6 +67,8 @@ internal class ENPushUrlBuilder: NSObject {
             pwUrl_ += HTTPS_SCHEME
             pwUrl_ += ENPush.sharedInstance.getCloudRegion()
             pwUrl_ += DOT
+            pwUrl_ += ENPUSH
+            pwUrl_ += DOT
             pwUrl_ += HOST
         }
         pwUrl_ += FORWARDSLASH
