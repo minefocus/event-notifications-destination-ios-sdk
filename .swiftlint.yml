@@ -1,0 +1,30 @@
+included:
+- ENPushDestination
+
+excluded:
+- IBMSwiftSDKCore
+- ENPushDestinationTests
+- ENPushTestApp
+- ENExtensionApp
+- Carthage
+- Pods
+- SwiftLint/Common/3rdPartyLib
+
+disabled_rules:
+- trailing_whitespace
+- identifier_name
+- orphaned_doc_comment
+- type_body_length
+- function_parameter_count
+- cyclomatic_complexity
+- function_body_length
+- file_length
+
+line_length:
+    warning: 300
+    error: 400
+    ignores_function_declarations: true
+    ignores_comments: true
+    ignores_urls: true
+
+

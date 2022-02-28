@@ -1,0 +1,18 @@
+language: objective-c
+
+matrix:
+  include:
+    - osx_image: xcode13.2
+
+before_install:
+  - rvm install 2.6.0
+
+install:
+  - gem install cocoapods
+
+script:
+  - pod update
+  - pod lib lint --allow-warnings
+  - xcodebuild clean build -workspace ENPushDestination.xcworkspace -scheme ENPushDestination CODE_SIGNING_REQUIRED=NO SUPPORTS_MACCATALYST=NO -destination "generic/platform=iOS Simulator"
+  - xcodebuild test -workspace ENPushDestination.xcworkspace -scheme ENPushDestinationTests -destination 'platform=iOS Simulator,name=iPhone 11,OS=15.2';
+
