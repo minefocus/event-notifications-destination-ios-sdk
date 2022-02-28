@@ -1,4 +1,4 @@
-// swift-tools-version:4.0
+// swift-tools-version:4.2
 
 /**
  (C) Copyright IBM Corp. 2021.
