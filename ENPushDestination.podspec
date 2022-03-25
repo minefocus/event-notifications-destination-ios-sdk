@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
     s.name                  = 'ENPushDestination'
-    s.version               = '0.0.1'
+    s.version               = '0.0.2'
     s.summary               = 'iOS Destination SDK for IBM Cloud Event Notifications service'
     s.license               = { :type => 'Apache License, Version 2.0', :file => 'LICENSE' }
     s.homepage              = 'https://github.com/IBM/event-notifications-destination-ios-sdk'

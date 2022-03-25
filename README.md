@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.com/IBM/event-notifications-destination-ios-sdk.svg?token=eW5FVD71iyte6tTby8gr&branch=main)](https://travis-ci.com/IBM/event-notifications-destination-ios-sdk)
 
 
-# iOS destination SDK for IBM Cloud Event Notifications service Version 0.0.1
+# iOS destination SDK for IBM Cloud Event Notifications service Version 0.0.2
 iOS destination client library to interact with various [IBM Cloud Event Notifications Service](https://cloud.ibm.com/apidocs?category=event-notifications).
 
 Disclaimer: this SDK is being released initially as a **pre-release** version.
@@ -52,7 +52,7 @@ To use the Event Notifications iOS destination SDK, define a dependency that con
 use_frameworks!
 
 target 'MyApp' do
-    pod 'ENPushDestination', '~> 0.0.1'
+    pod 'ENPushDestination', '~> 0.0.2'
 end
 ```
 
@@ -61,7 +61,7 @@ end
 To install `ENPushDestination` using Carthage, add the following to your Cartfile.
 
 ```ruby
-  github "IBM/event-notifications-destination-ios-sdk" ~> 0.0.1
+  github "IBM/event-notifications-destination-ios-sdk" ~> 0.0.2
 ```
 
 Then run the following command to build the dependencies and frameworks:
