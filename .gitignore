@@ -1,0 +1,55 @@
+# Mac
+.DS_Store
+
+# Carthage
+Carthage/
+
+# CocoaPod
+Pods/
+
+# Xcode
+
+## Build generated
+build/
+DerivedData/
+
+## Various settings
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata/
+*.xcuserstate
+
+## Other
+bin/
+*.xcworkspace
+!default.xcworkspace
+profile
+!Profile/
+*.moved-aside
+*.xccheckout
+*.xcscmblueprint
+
+
+# Ruby
+vendor/
+.bundle
+.config
+.yardoc
+
+
+# fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
+
+# Others
+*.p12
+!.gitmodules
